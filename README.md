@@ -8,3 +8,7 @@
 ### 2
 - Created `Review` model and added the fields 
 - Registered Review model in Django admin  
+
+### 3
+- serialization and authentication
+- allow users CRUD
