@@ -12,3 +12,5 @@
 ### 3
 - serialization and authentication
 - allow users CRUD
+- CRUD operations for movie reviews
+- Authenticated users can post/edit their reviews

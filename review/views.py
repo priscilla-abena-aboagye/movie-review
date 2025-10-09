@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.middleware import csrf
 from rest_framework import status
+from rest_framework.exceptions import PermissionDenied
 
 
 
@@ -51,11 +52,22 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
         return self.request.user
     
 class ReviewViewSet(viewsets.ModelViewSet):
-    queryset = Review.objects.all()
+    queryset = Review.objects.all().order_by('-created_at')
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer):
+        review = self.get_object()
+        if review.user != self.request.user:
+            raise PermissionDenied("You can only update your own reviews.")
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            raise PermissionDenied("You can only delete your own reviews.")
+        instance.delete()
 
 
