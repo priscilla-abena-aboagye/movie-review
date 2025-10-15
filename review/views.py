@@ -13,6 +13,8 @@ from django.utils.decorators import method_decorator
 from django.middleware import csrf
 from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 
 
@@ -55,6 +57,11 @@ class ReviewViewSet(viewsets.ModelViewSet):
     queryset = Review.objects.all().order_by('-created_at')
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+
+    filterset_fields = ['rating']
+    search_fields = ['title', 'content']
+    ordering_fields = ['created_at', 'rating']
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
