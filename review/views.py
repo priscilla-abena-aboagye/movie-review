@@ -15,29 +15,29 @@ from rest_framework import status
 from rest_framework.exceptions import PermissionDenied
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 
 # User registration
-@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
 
-@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(APIView):
+    permission_classes = [permissions.AllowAny]
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            csrf_token = csrf.get_token(request)
+            refresh = RefreshToken.for_user(user)
             return Response({"message": "Login successful!", 
-                             "csrf_token": csrf_token
-                             }, status=status.HTTP_200_OK)
+                             "user": username,
+                             "access": str(refresh.access_token),
+                             "refresh": str(refresh)})
         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
     
 class LogoutView(APIView):
