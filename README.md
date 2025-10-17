@@ -29,8 +29,8 @@ To log in
 - POST
 ```json
 {
-  "username": "abena",
-  "password": "abenapassword123"
+  "username": "xxxxx",
+  "password": "xxxxx"
 }
 ```
 To create reviews
@@ -38,8 +38,8 @@ To create reviews
 - POST
 ```json
 {
-  "title": "Naruto",
-  "content": "A mind-blowing experience.",
+  "title": "Seven deadly sins",
+  "content": "Can not get over it",
   "rating": 4
 }
 ```
@@ -52,9 +52,9 @@ To update reviews
 - PUT
 ```json
 {
-  "title": "Naruto",
+  "title": "Demon Slayer",
   "content": "Still a great movie after rewatching!",
-  "rating": 4
+  "rating": 5
 }
 ```
 To delete a review 
@@ -68,11 +68,11 @@ To delete a review
 ```
 
 To search a review 
-- `/api/review/?search=Sollo`
+- `/api/reviews/?search=Sollo`
 - GET
 
 To filter a rating 
-- `/api/review/?rating=4`
+- `/api/reviews/?rating=4`
 - GET
 
 ---
